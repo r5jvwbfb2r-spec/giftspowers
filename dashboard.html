@@ -1,295 +1,180 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GIFTS-POWERS 礼蕴力量 | 企业级管理后台</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { brand: { dark: '#070b14', panel: 'rgba(13, 20, 36, 0.75)', accent: '#00f2fe', purple: '#7928ca', cyan: '#4facfe' } }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIFTS-POWERS 礼蕴力量 | 企业级管理后台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand: { dark: '#070b14', panel: 'rgba(13, 20, 36, 0.75)', accent: '#00f2fe', purple: '#7928ca', cyan: '#4facfe' } }
+                }
+            }
         }
-      }
-    }
-  </script>
-
-  <style>
-    body { font-family: 'Inter', sans-serif; background-color: #070b14; color: #f1f5f9; overflow-x: hidden; }
-    .mono-font { font-family: 'JetBrains Mono', monospace; }
-    .glass-panel { background: rgba(13, 20, 36, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
-    .glass-card { background: rgba(18, 26, 47, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
-    .gradient-text { background: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #7928ca 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  </style>
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #070b14; color: #f1f5f9; overflow-x: hidden; }
+        .mono-font { font-family: 'JetBrains Mono', monospace; }
+        .glass-panel { background: rgba(13, 20, 36, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: rgba(18, 26, 47, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .gradient-text { background: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #7928ca 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
 </head>
 <body class="flex h-screen overflow-hidden">
 
-  <!-- 侧边导航 -->
-  <aside class="w-64 glass-panel border-r border-slate-800 flex flex-col justify-between z-20">
-    <div>
-      <div class="p-5 border-b border-slate-800/60 flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20">
-          <i class="fa-solid fa-cube text-xl"></i>
-        </div>
+    <!-- 侧边栏 -->
+    <aside class="w-64 glass-panel border-r border-slate-800 flex flex-col justify-between z-20">
         <div>
-          <h1 class="font-bold text-lg leading-none gradient-text tracking-wide">GIFTS-POWERS</h1>
-          <p class="text-[10px] text-slate-400 mt-1">礼蕴力量 · 运营管理后台</p>
-        </div>
-      </div>
-
-      <nav class="p-4 space-y-1 text-sm font-medium">
-        <button onclick="switchTab('overview')" id="nav-overview" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 transition text-left">
-          <i class="fa-solid fa-chart-pie w-5"></i> 控制台概览
-        </button>
-        <button onclick="switchTab('orders')" id="nav-orders" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 transition text-left">
-          <i class="fa-solid fa-file-invoice-dollar w-5"></i> 定制询价订单
-          <span id="order-badge" class="ml-auto bg-cyan-500 text-slate-950 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
-        </button>
-        <button onclick="switchTab('models')" id="nav-models" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 transition text-left">
-          <i class="fa-solid fa-shapes w-5"></i> 3D物料与价格库
-        </button>
-        <button onclick="switchTab('site')" id="nav-site" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 transition text-left">
-          <i class="fa-solid fa-globe w-5"></i> 前台 3D 联动配置
-        </button>
-      </nav>
-    </div>
-
-    <div class="p-4 border-t border-slate-800/60 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-full bg-slate-800 border border-cyan-500/30 flex items-center justify-center text-cyan-450 text-cyan-400">
-          <i class="fa-solid fa-user-shield"></i>
-        </div>
-        <div>
-          <div class="text-xs font-semibold text-slate-200">超级管理员</div>
-          <div class="text-[10px] text-slate-400">admin@giftspowers.com</div>
-        </div>
-      </div>
-      <a href="index.html" target="_blank" title="访问前台" class="text-cyan-400 hover:text-cyan-300 text-xs"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-    </div>
-  </aside>
-
-  <!-- 主体区域 -->
-  <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
-    <header class="h-16 border-b border-slate-800/60 glass-panel sticky top-0 z-10 px-6 flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <h2 id="page-title" class="text-base font-semibold text-slate-200">控制台概览</h2>
-        <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> 实时双向联动已启用
-        </span>
-      </div>
-    </header>
-
-    <div class="p-6 space-y-6">
-
-      <!-- 视图 1：控制台概览 -->
-      <div id="view-overview" class="space-y-6">
-        <div class="grid grid-cols-4 gap-5">
-          <div class="glass-card p-5 rounded-2xl relative overflow-hidden">
-            <div class="text-xs text-slate-400 font-medium">累计询价总额</div>
-            <div id="stat-total-amount" class="text-2xl font-bold text-slate-100 mt-2 mono-font">￥0</div>
-          </div>
-          <div class="glass-card p-5 rounded-2xl relative overflow-hidden">
-            <div class="text-xs text-slate-400 font-medium">定制询价总单数</div>
-            <div id="stat-total-orders" class="text-2xl font-bold text-slate-100 mt-2 mono-font">0 单</div>
-          </div>
-          <div class="glass-card p-5 rounded-2xl relative overflow-hidden">
-            <div class="text-xs text-slate-400 font-medium">上架 3D 物料</div>
-            <div class="text-2xl font-bold text-cyan-400 mt-2 mono-font">3 款</div>
-          </div>
-          <div class="glass-card p-5 rounded-2xl relative overflow-hidden">
-            <div class="text-xs text-slate-400 font-medium">系统状态</div>
-            <div class="text-xl font-bold text-emerald-400 mt-2">正常运行</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 视图 2：订单管理 -->
-      <div id="view-orders" class="space-y-6 hidden">
-        <div class="glass-panel p-5 rounded-2xl border border-slate-800/80">
-          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
-            <div>
-              <h3 class="font-semibold text-slate-200 text-sm">B2B 定制询价订单列表</h3>
-              <p class="text-xs text-slate-400 mt-0.5">包含前台用户提交的全部定制需求</p>
+            <div class="p-5 border-b border-slate-800/60 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-white shadow-lg">
+                    <i class="fa-solid fa-cube text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-none gradient-text tracking-wide">GIFTS-POWERS</h1>
+                    <p class="text-[10px] text-slate-400 mt-1">礼蕴力量 · 运营管理后台</p>
+                </div>
             </div>
-            <button onclick="openOrderModal()" class="px-3.5 py-1.5 rounded-xl bg-cyan-500 text-slate-950 font-semibold text-xs">新增订单</button>
-          </div>
-          <div class="overflow-x-auto mt-4">
-            <table class="w-full text-left border-collapse text-xs">
-              <thead>
-                <tr class="border-b border-slate-800 text-slate-400">
-                  <th class="py-3 px-4 font-medium">项目 / 客户</th>
-                  <th class="py-3 px-4 font-medium">数量</th>
-                  <th class="py-3 px-4 font-medium">预估总价</th>
-                  <th class="py-3 px-4 font-medium">状态</th>
-                  <th class="py-3 px-4 font-medium text-right">操作</th>
-                </tr>
-              </thead>
-              <tbody id="orders-table-body" class="divide-y divide-slate-800/60 text-slate-300"></tbody>
-            </table>
-          </div>
+
+            <nav class="p-4 space-y-1 text-sm font-medium">
+                <button onclick="switchTab('orders')" id="nav-orders" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 transition text-left">
+                    <i class="fa-solid fa-file-invoice-dollar w-5"></i> 定制询价订单 <span id="order-badge" class="ml-auto bg-cyan-500 text-slate-950 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+                </button>
+                <button onclick="switchTab('models')" id="nav-models" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/40 transition text-left">
+                    <i class="fa-solid fa-shapes w-5"></i> 3D物料与价格矩阵
+                </button>
+            </nav>
         </div>
-      </div>
 
-      <!-- 视图 3：物料价格库 -->
-      <div id="view-models" class="space-y-6 hidden">
-        <div class="glass-panel p-5 rounded-2xl border border-slate-800/80">
-          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
-            <div>
-              <h3 class="font-semibold text-slate-200 text-sm">物料模型与阶梯价格配置</h3>
-              <p class="text-xs text-slate-400 mt-0.5">保存后前台计算器价格将立即改变</p>
-            </div>
-            <button onclick="saveModelsConfig()" class="px-3.5 py-1.5 rounded-xl bg-cyan-500 text-slate-950 font-semibold text-xs">保存物料配置</button>
-          </div>
-          <div class="grid grid-cols-3 gap-5 mt-5" id="models-cards-container"></div>
+        <div class="p-4 border-t border-slate-800/60 flex items-center justify-between">
+            <div class="text-xs text-slate-300">管理员已登录</div>
+            <a href="index.html" target="_blank" class="text-cyan-400 text-xs"><i class="fa-solid fa-arrow-up-right-from-square"></i> 访问前台</a>
         </div>
-      </div>
+    </aside>
 
-      <!-- 视图 4：前台配置 -->
-      <div id="view-site" class="space-y-6 hidden">
-        <div class="glass-panel p-5 rounded-2xl border border-slate-800/80 space-y-5">
-          <div class="pb-3 border-b border-slate-800">
-            <h3 class="font-semibold text-slate-200 text-sm">前台默认展示设置</h3>
-          </div>
-          <div class="grid grid-cols-2 gap-5 text-xs">
-            <div class="space-y-1.5">
-              <label class="text-slate-400">默认推荐物料</label>
-              <select id="site-default-model" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-200">
-                <option value="保温杯">保温杯</option>
-                <option value="马克杯">马克杯</option>
-                <option value="纪念币">纪念币</option>
-              </select>
+    <!-- 主体 -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+        <header class="h-16 border-b border-slate-800/60 glass-panel sticky top-0 z-10 px-6 flex items-center justify-between">
+            <h2 id="page-title" class="text-base font-semibold text-slate-200">B2B 定制询价订单管理</h2>
+            <span class="text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full"><i class="fa-solid fa-circle-dot"></i> 双向实时联动在线</span>
+        </header>
+
+        <div class="p-6 space-y-6">
+            <!-- 订单管理视图 -->
+            <div id="view-orders" class="space-y-6">
+                <div class="glass-panel p-5 rounded-2xl border border-slate-800/80">
+                    <div class="flex justify-between items-center pb-4 border-b border-slate-800">
+                        <h3 class="font-semibold text-slate-200 text-sm">来自前台 3D 展厅的客户询价列表</h3>
+                    </div>
+                    <div class="overflow-x-auto mt-4">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400">
+                                    <th class="py-3 px-4">项目 / 客户企业</th>
+                                    <th class="py-3 px-4">订购数量</th>
+                                    <th class="py-3 px-4">预估总价</th>
+                                    <th class="py-3 px-4">处理状态</th>
+                                    <th class="py-3 px-4 text-right">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-table-body" class="divide-y divide-slate-800/60 text-slate-300"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div>
-            <button onclick="saveSiteConfig()" class="px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-semibold text-xs">保存前台配置</button>
-          </div>
+
+            <!-- 物料与价格矩阵配置视图 -->
+            <div id="view-models" class="space-y-6 hidden">
+                <div class="glass-panel p-5 rounded-2xl border border-slate-800/80">
+                    <div class="flex justify-between items-center pb-4 border-b border-slate-800">
+                        <div>
+                            <h3 class="font-semibold text-slate-200 text-sm">物料起订量与阶梯价格设置</h3>
+                            <p class="text-xs text-slate-400 mt-0.5">修改后点击保存，前台计算器将立即按照新价格计算</p>
+                        </div>
+                        <button onclick="saveModelsConfig()" class="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-xs">保存物料配置</button>
+                    </div>
+                    <div class="grid grid-cols-3 gap-5 mt-5" id="models-cards-container"></div>
+                </div>
+            </div>
         </div>
-      </div>
+    </main>
 
-    </div>
-  </main>
+    <script>
+        let defaultOrders = [
+            { id: 1, client: '字节跳动 (张经理)', project: '高级双层保温杯 定制方案', qty: 500, price: 22500, status: '待核价报价' }
+        ];
+        let defaultModels = [
+            { name: '高级双层保温杯', spec: 'SPEC: 304 STAINLESS STEEL / 500ML', moq: 50, price: 68, discountPrice: 45, type: 'bottle' },
+            { name: '定制陶瓷马克杯', spec: 'SPEC: HIGH-TEMP CERAMIC / 350ML', moq: 100, price: 38, discountPrice: 22, type: 'mug' },
+            { name: '高档金属纪念币', spec: 'SPEC: ZINC ALLOY / 24K GOLD PLATED', moq: 200, price: 85, discountPrice: 52, type: 'coin' }
+        ];
 
-  <div id="toast" class="fixed bottom-6 right-6 glass-panel px-4 py-3 rounded-xl border border-cyan-500/40 text-cyan-400 text-xs shadow-lg translate-y-20 opacity-0 transition-all duration-300 z-50">操作成功</div>
+        let orders = JSON.parse(localStorage.getItem('gp_orders')) || defaultOrders;
+        let models = JSON.parse(localStorage.getItem('gp_models')) || defaultModels;
 
-  <script>
-    let defaultOrders = [
-      { id: 1, client: '字节跳动', project: '秋季科技展会 - 双层保温杯定制', qty: 500, price: 27500, status: '待核价报价' },
-      { id: 2, client: '腾讯科技', project: '年度供应商酬谢 - 纪念金币盒', qty: 200, price: 19600, status: '已发送 3D 方案' }
-    ];
-    let defaultModels = [
-      { name: '高级双层保温杯', spec: '304 STAINLESS STEEL / 500ML', moq: 50, price: 68, discountPrice: 45 },
-      { name: '定制陶瓷马克杯', spec: 'HIGH-TEMP CERAMIC / 350ML', moq: 100, price: 38, discountPrice: 22 },
-      { name: '高档金属纪念币', spec: 'ANTI-COUNTERFEIT RELIEF COIN', moq: 200, price: 85, discountPrice: 52 }
-    ];
+        function switchTab(tab) {
+            document.getElementById('view-orders').classList.toggle('hidden', tab !== 'orders');
+            document.getElementById('view-models').classList.toggle('hidden', tab !== 'models');
+            document.getElementById('page-title').innerText = tab === 'orders' ? 'B2B 定制询价订单管理' : '3D物料与价格矩阵';
+            if(tab === 'orders') renderOrders();
+            if(tab === 'models') renderModels();
+        }
 
-    let orders = JSON.parse(localStorage.getItem('gp_orders')) || defaultOrders;
-    let models = JSON.parse(localStorage.getItem('gp_models')) || defaultModels;
-    let siteConfig = JSON.parse(localStorage.getItem('gp_site_config')) || { model: '保温杯' };
+        function renderOrders() {
+            const tbody = document.getElementById('orders-table-body');
+            tbody.innerHTML = '';
+            orders.forEach(o => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-800/30 transition">
+                        <td class="py-3 px-4"><div class="font-medium text-slate-200">${o.project}</div><div class="text-[11px] text-slate-400"><i class="fa-solid fa-building"></i> ${o.client}</div></td>
+                        <td class="py-3 px-4 mono-font">${o.qty} 件</td>
+                        <td class="py-3 px-4 text-cyan-400 font-semibold mono-font">￥${Number(o.price).toLocaleString()}</td>
+                        <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 text-[10px]">${o.status}</span></td>
+                        <td class="py-3 px-4 text-right"><button onclick="deleteOrder(${o.id})" class="text-rose-400 hover:underline">删除</button></td>
+                    </tr>
+                `;
+            });
+            document.getElementById('order-badge').innerText = orders.length;
+        }
 
-    function saveData() {
-      localStorage.setItem('gp_orders', JSON.stringify(orders));
-      localStorage.setItem('gp_models', JSON.stringify(models));
-      localStorage.setItem('gp_site_config', JSON.stringify(siteConfig));
-    }
+        function renderModels() {
+            const container = document.getElementById('models-cards-container');
+            container.innerHTML = '';
+            models.forEach((m, idx) => {
+                container.innerHTML += `
+                    <div class="glass-card p-4 rounded-2xl space-y-3">
+                        <div class="flex justify-between"><h4 class="font-semibold text-slate-100 text-sm">${m.name}</h4></div>
+                        <div class="space-y-2 text-xs">
+                            <div><label class="text-slate-400">起订量 (MOQ)</label><input type="number" id="m-moq-${idx}" value="${m.moq}" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-slate-200 mt-1"></div>
+                            <div><label class="text-slate-400">基准单价 (&lt;500件)</label><input type="number" id="m-price-${idx}" value="${m.price}" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-slate-200 mt-1"></div>
+                            <div><label class="text-slate-400">批量优惠价 (&ge;500件)</label><input type="number" id="m-discount-${idx}" value="${m.discountPrice}" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-emerald-400 mt-1"></div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
 
-    function switchTab(tabName) {
-      ['overview', 'orders', 'models', 'site'].forEach(t => {
-        document.getElementById('view-' + t).classList.add('hidden');
-        document.getElementById('nav-' + t).className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 transition text-left";
-      });
-      document.getElementById('view-' + tabName).classList.remove('hidden');
-      document.getElementById('nav-' + tabName).className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 transition text-left";
-      
-      const titles = { 'overview': '控制台概览', 'orders': 'B2B 询价订单管理', 'models': '3D物料与价格库', 'site': '前台 3D 联动配置' };
-      document.getElementById('page-title').innerText = titles[tabName];
+        function saveModelsConfig() {
+            models.forEach((m, idx) => {
+                m.moq = Number(document.getElementById(`m-moq-${idx}`).value);
+                m.price = Number(document.getElementById(`m-price-${idx}`).value);
+                m.discountPrice = Number(document.getElementById(`m-discount-${idx}`).value);
+            });
+            localStorage.setItem('gp_models', JSON.stringify(models));
+            alert('物料价格配置已成功保存！前台 3D 展厅的计算器已实时同步。');
+        }
 
-      if (tabName === 'overview') renderOverview();
-      if (tabName === 'orders') renderOrders();
-      if (tabName === 'models') renderModels();
-      if (tabName === 'site') renderSiteConfig();
-    }
+        function deleteOrder(id) {
+            orders = orders.filter(o => o.id !== id);
+            localStorage.setItem('gp_orders', JSON.stringify(orders));
+            renderOrders();
+        }
 
-    function renderOverview() {
-      let totalAmount = orders.reduce((sum, o) => sum + Number(o.price), 0);
-      document.getElementById('stat-total-amount').innerText = '￥' + totalAmount.toLocaleString();
-      document.getElementById('stat-total-orders').innerText = orders.length + ' 单';
-      document.getElementById('order-badge').innerText = orders.length;
-    }
-
-    function renderOrders() {
-      const tbody = document.getElementById('orders-table-body');
-      tbody.innerHTML = '';
-      orders.forEach(o => {
-        tbody.innerHTML += `
-          <tr class="hover:bg-slate-800/30 transition">
-            <td class="py-3 px-4"><div class="font-medium text-slate-200">${o.project}</div><div class="text-[11px] text-slate-400">${o.client}</div></td>
-            <td class="py-3 px-4">${o.qty} 件</td>
-            <td class="py-3 px-4 text-cyan-400 font-semibold">￥${Number(o.price).toLocaleString()}</td>
-            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 text-[10px]">${o.status}</span></td>
-            <td class="py-3 px-4 text-right space-x-2">
-              <button onclick="deleteOrder(${o.id})" class="text-rose-400 hover:underline">删除</button>
-            </td>
-          </tr>
-        `;
-      });
-      renderOverview();
-    }
-
-    function renderModels() {
-      const container = document.getElementById('models-cards-container');
-      container.innerHTML = '';
-      models.forEach((m, idx) => {
-        container.innerHTML += `
-          <div class="glass-card p-4 rounded-2xl space-y-3">
-            <h4 class="font-semibold text-slate-100 text-sm">${m.name}</h4>
-            <p class="text-[11px] text-slate-400">起订量: ${m.moq}件</p>
-            <div class="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-slate-800">
-              <div><span class="text-slate-500 text-[10px]">基准单价</span><input type="number" id="m-price-${idx}" value="${m.price}" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-slate-200"></div>
-              <div><span class="text-slate-500 text-[10px]">批量优惠价</span><input type="number" id="m-discount-${idx}" value="${m.discountPrice}" class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-emerald-400"></div>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function saveModelsConfig() {
-      models.forEach((m, idx) => {
-        m.price = Number(document.getElementById(`m-price-${idx}`).value);
-        m.discountPrice = Number(document.getElementById(`m-discount-${idx}`).value);
-      });
-      saveData();
-      showToast('物料价格配置已保存并同步至前台！');
-    }
-
-    function renderSiteConfig() {
-      document.getElementById('site-default-model').value = siteConfig.model;
-    }
-
-    function saveSiteConfig() {
-      siteConfig.model = document.getElementById('site-default-model').value;
-      saveData();
-      showToast('前台配置已保存！');
-    }
-
-    function deleteOrder(id) {
-      orders = orders.filter(o => o.id !== id);
-      saveData();
-      renderOrders();
-      showToast('订单已删除');
-    }
-
-    function showToast(text) {
-      const toast = document.getElementById('toast');
-      toast.innerText = text;
-      toast.classList.remove('translate-y-20', 'opacity-0');
-      setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 2500);
-    }
-
-    renderOverview();
-  </script>
+        renderOrders();
+    </script>
 </body>
 </html>
