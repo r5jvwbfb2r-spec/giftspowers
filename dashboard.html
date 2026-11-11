@@ -173,29 +173,6 @@
     </div>
   </main>
 
-  <!-- 订单编辑弹窗 -->
-  <div id="order-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="glass-panel w-full max-w-md p-6 rounded-2xl border border-slate-700 space-y-4">
-      <div class="flex justify-between items-center pb-3 border-b border-slate-800">
-        <h3 id="modal-title" class="font-semibold text-slate-200 text-sm">订单操作</h3>
-        <button onclick="closeOrderModal()" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <input type="hidden" id="edit-order-id">
-      <div class="space-y-3 text-xs">
-        <div><label class="text-slate-400 block mb-1">客户名称</label><input type="text" id="form-client" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-200"></div>
-        <div><label class="text-slate-400 block mb-1">项目标题</label><input type="text" id="form-project" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-200"></div>
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="text-slate-400 block mb-1">数量</label><input type="number" id="form-qty" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-200"></div>
-          <div><label class="text-slate-400 block mb-1">总价</label><input type="number" id="form-price" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-slate-200"></div>
-        </div>
-      </div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button onclick="closeOrderModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs">取消</button>
-        <button onclick="saveOrder()" class="px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-semibold text-xs">保存</button>
-      </div>
-    </div>
-  </div>
-
   <div id="toast" class="fixed bottom-6 right-6 glass-panel px-4 py-3 rounded-xl border border-cyan-500/40 text-cyan-400 text-xs shadow-lg translate-y-20 opacity-0 transition-all duration-300 z-50">操作成功</div>
 
   <script>
