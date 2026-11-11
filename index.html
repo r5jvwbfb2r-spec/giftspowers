@@ -16,13 +16,7 @@
       theme: {
         extend: {
           colors: {
-            brand: {
-              dark: '#070b14',
-              panel: 'rgba(13, 20, 36, 0.75)',
-              accent: '#00f2fe',
-              purple: '#7928ca',
-              cyan: '#4facfe'
-            }
+            brand: { dark: '#070b14', panel: 'rgba(13, 20, 36, 0.75)', accent: '#00f2fe', purple: '#7928ca', cyan: '#4facfe' }
           }
         }
       }
@@ -52,9 +46,8 @@
     <div class="flex items-center gap-8 text-sm font-medium text-slate-300">
       <a href="#" class="text-cyan-400 hover:text-cyan-300 transition">3D 展厅</a>
       <a href="#catalog" class="hover:text-cyan-400 transition">产品目录</a>
-      <a href="#solution" class="hover:text-cyan-400 transition">定制方案</a>
       <a href="dashboard.html" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/30 text-xs flex items-center gap-1.5 transition">
-        <i class="fa-solid fa-gauge-high"></i> 运营后台
+        <i class="fa-solid fa-gauge-high"></i> 运营后台管理
       </a>
     </div>
   </header>
@@ -76,7 +69,7 @@
         </div>
       </div>
 
-      <!-- 3D WebGL Canvas 挂载点 -->
+      <!-- 3D WebGL Canvas -->
       <div id="canvas-container" class="w-full h-[460px] rounded-2xl relative bg-slate-950/60 border border-slate-900 overflow-hidden cursor-grab active:cursor-grabbing">
         <div class="absolute bottom-4 right-4 bg-slate-900/80 backdrop-blur border border-slate-800 px-3 py-1.5 rounded-lg text-[11px] text-slate-400 pointer-events-none">
           <i class="fa-solid fa-arrows-rotate mr-1"></i> 按住鼠标左键 360° 旋转 / 滚轮缩放
@@ -103,13 +96,13 @@
       </div>
     </div>
 
-    <!-- 右侧：实时报价与动态计算面板 -->
+    <!-- 右侧：实时报价计算器 -->
     <div class="col-span-4 glass-panel rounded-3xl p-6 space-y-5">
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
         <h3 class="font-semibold text-slate-200 text-sm flex items-center gap-2">
           <i class="fa-solid fa-calculator text-cyan-400"></i> 参数报价计算器
         </h3>
-        <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">后台数据已同步</span>
+        <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">后台数据实时同步</span>
       </div>
 
       <div class="space-y-4 text-xs">
@@ -132,10 +125,6 @@
             <span class="text-slate-400">预估生产周期:</span>
             <span class="text-slate-200">5-7 个工作日</span>
           </div>
-          <div class="flex justify-between">
-            <span class="text-slate-400">免费增值服务:</span>
-            <span class="text-cyan-400">排版设计 / 3D 渲染排版图</span>
-          </div>
         </div>
 
         <div class="pt-2 border-t border-slate-800 flex items-center justify-between">
@@ -152,7 +141,7 @@
   </main>
 
   <script>
-    // 从后台 LocalStorage 加载动态配置与价格
+    // 从后台 LocalStorage 自动同步配置与价格
     let savedModels = JSON.parse(localStorage.getItem('gp_models')) || [
       { name: '高级双层保温杯', spec: '304 STAINLESS STEEL / 500ML', moq: 50, price: 68, discountPrice: 45 },
       { name: '定制陶瓷马克杯', spec: 'HIGH-TEMP CERAMIC / 350ML', moq: 100, price: 38, discountPrice: 22 },
@@ -164,7 +153,7 @@
     let currentLight = savedSiteConfig.light || '棚拍';
     let currentMatColor = 0x00f2fe;
 
-    // Three.js 3D 场景初始化
+    // Three.js 场景
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x070b14);
@@ -175,21 +164,17 @@
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.shadowMap.enabled = true;
     container.appendChild(renderer.domElement);
 
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
 
-    // 灯光系统
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
     scene.add(ambientLight);
-
     const dirLight = new THREE.DirectionalLight(0xffffff, 2.0);
     dirLight.position.set(5, 8, 5);
     scene.add(dirLight);
-
     const pointLight = new THREE.PointLight(0x00f2fe, 3, 10);
     pointLight.position.set(-3, 2, 3);
     scene.add(pointLight);
@@ -204,23 +189,113 @@
           btn.className = "px-3 py-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition";
         }
       });
-      if (preset === '棚拍') { dirLight.color.setHex(0xffffff); pointLight.color.setHex(0x00f2fe); }
-      else if (preset === '霓虹') { dirLight.color.setHex(0xff00ff); pointLight.color.setHex(0x00ffff); }
-      else if (preset === '暖光') { dirLight.color.setHex(0xffaa44); pointLight.color.setHex(0xff5500); }
     }
 
-    // 构建动态 3D 模型
     let currentMesh;
     function buildModel(type) {
       if (currentMesh) scene.remove(currentMesh);
       const group = new THREE.Group();
 
-      if (type === '保温杯' || type === '保温杯') {
-        const bodyGeo = new THREE.CylinderGeometry(0.8, 0.7, 2.5, 32);
-        const bodyMat = new THREE.MeshStandardMaterial({ color: currentMatColor, roughness: 0.3, metalness: 0.8 });
-        const body = new THREE.Mesh(bodyGeo, bodyMat);
+      if (type.includes('保温杯')) {
+        const body = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.7, 2.5, 32), new THREE.MeshStandardMaterial({ color: currentMatColor, roughness: 0.3, metalness: 0.8 }));
         group.add(body);
+        const lid = new THREE.Mesh(new THREE.CylinderGeometry(0.82, 0.82, 0.5, 32), new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.2 }));
+        lid.position.y = 1.35;
+        group.add(lid);
+      } else if (type.includes('马克杯')) {
+        const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.75, 2.0, 32), new THREE.MeshStandardMaterial({ color: currentMatColor, roughness: 0.4 }));
+        group.add(cup);
+        const handle = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.1, 16, 32, Math.PI), new THREE.MeshStandardMaterial({ color: currentMatColor, roughness: 0.4 }));
+        handle.rotation.z = Math.PI / 2;
+        handle.position.set(0.9, 0, 0);
+        group.add(handle);
+      } else {
+        const coin = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 0.2, 32), new THREE.MeshStandardMaterial({ color: currentMatColor, roughness: 0.2, metalness: 0.9 }));
+        group.add(coin);
+      }
+      currentMesh = group;
+      scene.add(currentMesh);
+    }
 
-        const lidGeo = new THREE.CylinderGeometry(0.82, 0.82, 0.5, 32);
-        const lidMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.2 });
-        const lid = new THREE.Mesh(lidGeo, lid
+    function switchModel(type) {
+      currentModelType = type;
+      ['保温杯', '马克杯', '纪念币'].forEach(t => {
+        const btn = document.getElementById('model-btn-' + t);
+        if (t === type) {
+          btn.className = "px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold transition shadow-lg shadow-cyan-500/20";
+        } else {
+          btn.className = "px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+        }
+      });
+
+      const found = savedModels.find(m => m.name.includes(type));
+      if (found) {
+        document.getElementById('model-title-display').innerText = found.name;
+        document.getElementById('model-spec-display').innerText = 'SPEC: ' + found.spec;
+        document.getElementById('moq-label').innerText = '起订量: ' + found.moq + '件';
+        document.getElementById('qty-slider').min = found.moq;
+        document.getElementById('qty-slider').value = found.moq;
+      }
+      buildModel(type);
+      updatePricing();
+    }
+
+    function setMaterialColor(hexStr) {
+      currentMatColor = parseInt(hexStr.replace('#', '0x'));
+      if (currentMesh) {
+        currentMesh.children.forEach(child => {
+          if (child.material && !child.material.color.equals(new THREE.Color(0x1e293b))) {
+            child.material.color.setHex(currentMatColor);
+          }
+        });
+      }
+    }
+
+    function updatePricing() {
+      const qty = parseInt(document.getElementById('qty-slider').value);
+      document.getElementById('qty-text').innerText = qty;
+
+      const found = savedModels.find(m => m.name.includes(currentModelType)) || savedModels[0];
+      let unitPrice = qty >= 500 ? found.discountPrice : found.price;
+      let total = qty * unitPrice;
+
+      document.getElementById('unit-price-display').innerText = '￥' + unitPrice.toFixed(2) + ' / 件';
+      document.getElementById('total-price-display').innerText = '￥' + total.toLocaleString();
+    }
+
+    function submitInquiry() {
+      const qty = document.getElementById('qty-slider').value;
+      const total = document.getElementById('total-price-display').innerText;
+      
+      let orders = JSON.parse(localStorage.getItem('gp_orders')) || [];
+      orders.unshift({
+        id: Date.now(),
+        client: '前台在线访客',
+        project: document.getElementById('model-title-display').innerText + ' 定制需求',
+        qty: Number(qty),
+        price: Number(total.replace(/[^0-9.]/g, '')),
+        status: '待核价报价'
+      });
+      localStorage.setItem('gp_orders', JSON.stringify(orders));
+      alert('定制需求已成功提交至后台运营系统！');
+    }
+
+    setLightPreset(currentLight);
+    switchModel(currentModelType);
+
+    function animate() {
+      requestAnimationFrame(animate);
+      if (currentMesh) currentMesh.rotation.y += 0.003;
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+  </script>
+</body>
+</html>
